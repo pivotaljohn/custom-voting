@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountManager {
 
-	@PreAuthorize("hasRole('PROGRAM_HUB') or (hasRole('RETAILER') and hasPermission(#sourceAccountId, 'io.pivotal.springroots.accounts.Account', AccountPermission.LINK))")
+	@PreAuthorize(
+		"hasRole('PROGRAM_HUB') or " +
+		"(hasRole('RETAILER') and @securityChecks.canLink(principal, #sourceAccountId))"
+	)
 	public void linkAccount(String sourceAccountId, String targetAccountId) {
 		log.trace("linkAccount(sourceAccountId = \"{}\", targetAccountId = \"{}\")", sourceAccountId, targetAccountId);
 
