@@ -10,7 +10,8 @@ public class AccountManager {
 
 	@PreAuthorize(
 		"hasRole('PROGRAM_HUB') or " +
-		"(hasRole('RETAILER') and @securityChecks.canLink(principal, #sourceAccountId))"
+			"(hasRole('RETAILER') and hasRole('LINKER')) or " +
+			"(hasRole('PROGRAM_HUB_IMPERSONATOR') and @securityChecks.canImpersonateLink(principal, #sourceAccountId))"
 	)
 	public void linkAccount(String sourceAccountId, String targetAccountId) {
 		log.trace("linkAccount(sourceAccountId = \"{}\", targetAccountId = \"{}\")", sourceAccountId, targetAccountId);

@@ -4,17 +4,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Component
 public class SecurityChecks {
+	private List<String> retailersThatCanLink;
 	private Map<String, Set<String>> testAccountsForRetailer;
 
 	public SecurityChecks() {
+		retailersThatCanLink = new ArrayList<>();
+		retailersThatCanLink.add("APL");
+
 		testAccountsForRetailer = new HashMap<>();
 		Set<String> accountIds = new HashSet<>();
 		accountIds.add("test-0001");
@@ -22,7 +23,7 @@ public class SecurityChecks {
 		testAccountsForRetailer.put("AMZ", accountIds);
 	}
 
-	public boolean canLink(UserDetails principal, String accountId) {
+	public boolean canImpersonateLink(UserDetails principal, String accountId) {
 		log.trace("provider = {}; accountId = {}", principal, accountId);
 		boolean hasPermission;
 

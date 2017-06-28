@@ -26,6 +26,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.security:spring-security-acl')
+
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
 	compileOnly "org.projectlombok:lombok:1.16.16"
