@@ -76,7 +76,6 @@ public class SwitchUserForRequestFilterTest {
 	}
 
 	@Test
-	@Ignore("Not implemented, yet.")
 	public void requiresSwitchMatchesCorrectly() {
 		SwitchUserForRequestFilter filter = new SwitchUserForRequestFilter();
 		filter.setSwitchUserHeader("X-Impersonate-Me");
@@ -89,7 +88,6 @@ public class SwitchUserForRequestFilterTest {
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
-	@Ignore("Not implemented, yet.")
 	public void attemptSwitchToUnknownUserFails() throws Exception {
 
 		MockHttpServletRequest request = createMockSwitchRequest("user-that-doesnt-exist");
@@ -100,37 +98,31 @@ public class SwitchUserForRequestFilterTest {
 	}
 
 	@Test
-	@Ignore("Not implemented, yet.")
 	public void attemptSwitchUserIsSuccessfulWithValidUser() throws Exception {
 		assertThat(switchToUser("jacklord")).isNotNull();
 	}
 
 	@Test(expected = DisabledException.class)
-	@Ignore("Not implemented, yet.")
 	public void attemptSwitchToUserThatIsDisabledFails() throws Exception {
 		switchToUser("mcgarrett");
 	}
 
 	@Test(expected = AccountExpiredException.class)
-	@Ignore("Not implemented, yet.")
 	public void attemptSwitchToUserWithAccountExpiredFails() throws Exception {
 		switchToUser("wofat");
 	}
 
 	@Test(expected = CredentialsExpiredException.class)
-	@Ignore("Not implemented, yet.")
 	public void attemptSwitchToUserWithExpiredCredentialsFails() throws Exception {
 		switchToUser("steve");
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
-	@Ignore("Not implemented, yet.")
-	public void switchUserWithNullUsernameThrowsException() throws Exception {
-		switchToUser(null);
+	public void switchUserWithBlankUsernameThrowsException() throws Exception {
+		switchToUser("");
 	}
 
 	@Test
-	@Ignore("Not implemented, yet.")
 	public void whenSwitchUserFailsFilterChainIsInterrupted() throws Exception {
 		MockHttpServletRequest request = createMockSwitchRequest("mcgarrett");
 		MockHttpServletResponse response = new MockHttpServletResponse();
@@ -145,16 +137,7 @@ public class SwitchUserForRequestFilterTest {
 		assertThat(response.getErrorMessage()).isNotNull();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	@Ignore("Not implemented, yet.")
-	public void configMissingUserDetailsServiceFails() throws Exception {
-		SwitchUserForRequestFilter filter = new SwitchUserForRequestFilter();
-		filter.setSwitchUserHeader(SWITCH_HEADER_NAME);
-		filter.afterPropertiesSet();
-	}
-
 	@Test
-	@Ignore("Not implemented, yet.")
 	public void whenSwitchSucceedsRemainderOfChainExecutesAsImpersonatedUser() throws Exception {
 		// set current user
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
@@ -179,7 +162,7 @@ public class SwitchUserForRequestFilterTest {
 		// verify remainder of chain was invoked as jacklord
 		Authentication targetAuth = captureAuthentication.getAuthentication();
 		assertThat(targetAuth).isNotNull();
-		assertThat(targetAuth.getPrincipal() instanceof UserDetails).isTrue();
+		assertThat(targetAuth.getPrincipal()).isInstanceOf(UserDetails.class);
 		assertThat(((User) targetAuth.getPrincipal()).getUsername()).isEqualTo("jacklord");
 	}
 
@@ -342,6 +325,8 @@ public class SwitchUserForRequestFilterTest {
 		assertThat(switchedFrom.getSource()).isSameAs(source);
 		assertThat(switchAuthorityRole).isEqualTo(switchedFrom.getAuthority());
 	}
+
+	@Test @Ignore public void switchedAuthenticationContainsWebDetails() {}
 
 	private MockHttpServletRequest createMockSwitchRequest(String targetUsername) {
 		MockHttpServletRequest request = new MockHttpServletRequest();
